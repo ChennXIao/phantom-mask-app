@@ -32,7 +32,7 @@ class PharmacyService
         $day = $weekdayMap[$data['day']] ?? null;
         $time = $data['time'] ?? null;
 
-        return $this->pharmacyRepository->getMasksByDayAndTime($day, $time);
+        return $this->pharmacyRepository->getPharmaciesByDayAndTime($day, $time);
     }
 
     public function getMasksForPharmacy(Pharmacy $pharmacy, array $validatedData)

@@ -7,7 +7,7 @@ use App\Models\Mask;
 
 class PharmacyRepository
 {
-    public function getMasksByDayAndTime(?string $day, ?string $time = '')
+    public function getPharmaciesByDayAndTime(?string $day, ?string $time = '')
     {
         $query = Pharmacy::query();
 

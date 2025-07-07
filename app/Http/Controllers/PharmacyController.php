@@ -51,7 +51,7 @@ class PharmacyController extends Controller
 
         $this->pharmacyService->batchUpsertMasks($pharmacy, $validatedData['masks']);
 
-        return response()->success();
+        return response()->success(null);
     }
 
     public function updateMaskStock(UpdateMaskStockRequest $request, Pharmacy $pharmacy, Mask $mask)

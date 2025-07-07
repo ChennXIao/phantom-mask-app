@@ -24,7 +24,7 @@ class BatchUpsertMasksRequest extends FormRequest
         return [
             'masks' => 'required|array',
             'masks.*.name' => 'required|string',
-            'masks.*.price' => 'required|numeric',
+            'masks.*.price' => 'required|numeric|min:0',
             'masks.*.stock_quantity' => 'required|integer',
         ];
     }
