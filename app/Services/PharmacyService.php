@@ -20,16 +20,7 @@ class PharmacyService
 
     public function getAllPharmacies($data)
     {
-        $weekdayMap = [
-            'Mon' => 1,
-            'Tue' => 2,
-            'Wed' => 3,
-            'Thu' => 4,
-            'Fri' => 5,
-            'Sat' => 6,
-            'Sun' => 7,
-        ];
-        $day = $weekdayMap[$data['day']] ?? null;
+        $day = isset($data['day']) ? $data['day'] : '';
         $time = $data['time'] ?? null;
 
         return $this->pharmacyRepository->getPharmaciesByDayAndTime($day, $time);

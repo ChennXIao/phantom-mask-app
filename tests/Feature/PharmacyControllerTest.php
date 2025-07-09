@@ -23,7 +23,7 @@ class PharmacyControllerTest extends TestCase
         $pharmacy = Pharmacy::factory()->create();
         PharmacyHour::factory()->create([
             'pharmacy_id' => $pharmacy->id,
-            'weekday' => '1',
+            'weekday' => 'Mon',
             'open_time' => '09:00:00',
             'close_time' => '17:00:00',
         ]);
@@ -141,4 +141,6 @@ class PharmacyControllerTest extends TestCase
                  ->assertJsonPath('data.pharmacies.0.name', 'Test Pharmacy A')
                  ->assertJsonPath('data.masks.0.name', 'Test Mask B');
     }
+
+    
 }
