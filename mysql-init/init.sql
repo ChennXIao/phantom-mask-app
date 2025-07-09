@@ -1,0 +1,5 @@
+CREATE DATABASE IF NOT EXISTS testing;
+
+GRANT ALL PRIVILEGES ON phantom_mask.* TO 'user'@'%';
+GRANT ALL PRIVILEGES ON testing.* TO 'user'@'%';
+FLUSH PRIVILEGES;
