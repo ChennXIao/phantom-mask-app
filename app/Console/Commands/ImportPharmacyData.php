@@ -39,7 +39,7 @@ class ImportPharmacyData extends Command
 
                     PharmacyHour::create([
                         'pharmacy_id' => $pharmacy->id,
-                        'weekday' => $weekMap[$weekDay] ?? 0,
+                        'weekday' => $weekDay ?? 0,
                         'open_time' => $openTime,
                         'close_time' => $closeTime,
                     ]);

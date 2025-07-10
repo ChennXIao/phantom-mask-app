@@ -11,13 +11,18 @@ class PharmacyRepository
     {
         $query = Pharmacy::query();
 
-        if ($day || $time) {
+        $query->when($day || $time, function ($query) use ($day, $time) {
             $query->whereHas('hours', function ($q) use ($day, $time) {
-                $q->where('weekday', $day)
-                    ->where('open_time', '<=', $time)
-                    ->where('close_time', '>=', $time);
+                if ($day) {
+                    $q->where('weekday', $day);
+                }
+                if ($time) {
+                    $q->where('open_time', '<=', $time)
+                        ->where('close_time', '>=', $time);
+                }
+               
             });
-        }
+        });
 
         return $query->with('hours')->get();
     }
@@ -42,7 +47,7 @@ class PharmacyRepository
         ]);
 
         if (!is_null($minCount) && !is_null($maxCount)) {
-            $query->havingBetween('masks_in_range_count', [$minCount, $maxCount]);
+            $query->havingBetween('count', [$minCount, $maxCount]);
         } elseif (!is_null($minCount)) {
             $query->having('count', '>=', $minCount);
         } elseif (!is_null($maxCount)) {
@@ -52,7 +57,7 @@ class PharmacyRepository
         return $query
             ->with(['masks' => function ($query) use ($minPrice, $maxPrice) {
                 $query->whereBetween('price', [$minPrice, $maxPrice])
-                    ->select('id', 'pharmacy_id', 'name', 'price');
+                    ->select('id', 'pharmacy_id', 'name', 'price', 'stock_quantity');
             }])
             ->get();
     }

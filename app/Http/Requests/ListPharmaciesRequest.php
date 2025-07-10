@@ -23,7 +23,11 @@ class ListPharmaciesRequest extends FormRequest
     {
         return [
             'day' => 'sometimes|string|in:Mon,Tue,Wed,Thu,Fri,Sat,Sun',
-            'time' => 'sometimes|string',
+            'time' => [
+                'sometimes',
+                'string',
+                'regex:/^([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/',
+            ],
         ];
     }
 }

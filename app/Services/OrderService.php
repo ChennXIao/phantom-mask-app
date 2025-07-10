@@ -24,6 +24,12 @@ class OrderService
 
     public function createOrder(array $data)
     {
-        return $this->orderRepository->createOrderWithDetails($data);
+        $order = $this->orderRepository->createOrderWithDetails($data);
+
+        return [
+            'id' => $order->id,
+            'customer_id' => $order->customer_id,
+            'total_amount' => $order->total_amount,
+        ];
     }
 }
