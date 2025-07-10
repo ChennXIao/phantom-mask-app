@@ -9,9 +9,9 @@
   * Implemented at `GET /api/orders/top-spenders` API.
 * [x] Process a purchase where a user buys masks from multiple pharmacies at once.  
   * Implemented at `POST /api/orders` API.
-* [x] Update the stock quantity of an existing mask product by increasing or decreasing it.  
+* [x] Update the stock quantity of an existing mask product by increasing or decreasing it. (update for a pharmacy, because there is a same mask sold by different pharmacy)
   * Implemented at `PATCH /api/pharmacies/{pharmacy}/masks/{mask}` API.
-* [x] Create or update multiple mask products for a pharmacy at once, including name, price, and stock quantity.  
+* [x] Create or update multiple mask products for a pharmacy at once, including name, price, and stock quantity.
   * Implemented at `POST /api/pharmacies/{pharmacy}/masks/batch` API.
 * [x] Search for pharmacies or masks by name and rank the results by relevance to the search term.  
   * Implemented at `GET /api/search` API.
