@@ -46,6 +46,10 @@ $ XDEBUG_MODE=coverage php artisan test --coverage-html=coverage
 ```
 - hint: after running this command, `/coverage` will be output to your IDE, the report can be seen when you access `/coverage/index.html`. You can install extension like [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to open up `/coverage/index.html`.
 
+<div align="center">
+  <img src="./assets/test_report.png" alt="Test-report" width="600"/>
+</div>
+
 You can run the test script by using the command below:
 ```bash
 $ php artisan test
@@ -74,3 +78,9 @@ $ php artisan import:customers-data
 ---
 ## Additional Data
 > The database schema is defined in `schema.dbml`. You can use a tool like dbdiagram.io to visualize the [ERD](https://dbdiagram.io/d/686fb17cf413ba35083f5564).
+
+<div align="center">
+  <img src="./assets/erd.png" alt="ERD" width="400"/>
+</div>
+
+
