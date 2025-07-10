@@ -7,17 +7,22 @@ use App\Models\Mask;
 
 class PharmacyRepository
 {
-    public function getMasksByDayAndTime(?string $day, ?string $time = '')
+    public function getPharmaciesByDayAndTime(?string $day, ?string $time = '')
     {
         $query = Pharmacy::query();
 
-        if ($day || $time) {
+        $query->when($day || $time, function ($query) use ($day, $time) {
             $query->whereHas('hours', function ($q) use ($day, $time) {
-                $q->where('weekday', $day)
-                    ->where('open_time', '<=', $time)
-                    ->where('close_time', '>=', $time);
+                if ($day) {
+                    $q->where('weekday', $day);
+                }
+                if ($time) {
+                    $q->where('open_time', '<=', $time)
+                        ->where('close_time', '>=', $time);
+                }
+               
             });
-        }
+        });
 
         return $query->with('hours')->get();
     }
@@ -33,21 +38,28 @@ class PharmacyRepository
         return $query->get();
     }
 
-    public function filterByMaskCount(?float $minPrice = null, ?float $maxPrice = null, string $operator = '>', int $count = 0)
+    public function filterByMaskCount(?float $minPrice = null, ?float $maxPrice = null, ?int $minCount = null, ?int $maxCount = null)
     {
-        return Pharmacy::whereHas('masks', function ($q) use ($minPrice, $maxPrice) {
-            if ($minPrice !== null && $maxPrice !== null) {
-                $q->whereBetween('price', [$minPrice, $maxPrice]);
+        $query = Pharmacy::withCount([
+            'masks as count' => function ($query) use ($minPrice, $maxPrice) {
+                $query->whereBetween('price', [$minPrice, $maxPrice]);
             }
-        }, $operator, $count)
-        ->with(['masks' => function($q) use ($minPrice, $maxPrice) {
-            if ($minPrice !== null && $maxPrice !== null) {
-                $q->whereBetween('price', [$minPrice, $maxPrice]);
-            }
-            $q->select('id', 'pharmacy_id', 'name', 'price');
-        }])
-        ->select('id', 'name')
-        ->get();
+        ]);
+
+        if (!is_null($minCount) && !is_null($maxCount)) {
+            $query->havingBetween('count', [$minCount, $maxCount]);
+        } elseif (!is_null($minCount)) {
+            $query->having('count', '>=', $minCount);
+        } elseif (!is_null($maxCount)) {
+            $query->having('count', '<=', $maxCount);
+        }
+
+        return $query
+            ->with(['masks' => function ($query) use ($minPrice, $maxPrice) {
+                $query->whereBetween('price', [$minPrice, $maxPrice])
+                    ->select('id', 'pharmacy_id', 'name', 'price', 'stock_quantity');
+            }])
+            ->get();
     }
 
     public function upsertMask(Pharmacy $pharmacy, array $maskData)
@@ -61,7 +73,7 @@ class PharmacyRepository
         );
     }
 
-        public function updateStock(Mask $mask, int $stockDelta): Mask
+    public function updateStock(Mask $mask, int $stockDelta): Mask
     {
         $mask->stock_quantity += $stockDelta;
         $mask->save();

@@ -53,17 +53,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'metadata' => [
                     'status' => ApiStatusCodeEnum::INSUFFICIENT_STOCK->value,
-                    'message' => ApiStatusCodeEnum::INSUFFICIENT_STOCK->message(),
-                ],
-                'data' => null,
-            ], 422);
-        });
-
-        $exceptions->render(function (InsufficientStockException $e, $request) {
-            return response()->json([
-                'metadata' => [
-                    'status' => ApiStatusCodeEnum::INSUFFICIENT_STOCK->value,
-                    'message' => ApiStatusCodeEnum::INSUFFICIENT_STOCK->message(),
+                    'message' => $e->getMessage() ?: ApiStatusCodeEnum::INSUFFICIENT_STOCK->message(),
                 ],
                 'data' => null,
             ], 422);
@@ -87,7 +77,6 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($previous instanceof ModelNotFoundException) {
                 $status = ApiStatusCodeEnum::MODEL_NOT_FOUND;
                 $model = class_basename($previous->getModel());
-                dd($model, $previous->getIds(), $previous->getMessage());
                 $ids = implode(',', $previous->getIds());
                 $message = "{$model} with ID {$ids} not found";
             }
