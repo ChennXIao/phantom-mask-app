@@ -44,9 +44,11 @@ You can open it up test report from [here](http://localhost:5500/coverage/index.
 $ XDEBUG_MODE=coverage php artisan test --coverage-html=coverage    
 
 ```
+- hint: after running this command, `/coverage` your IDE, the report can be seen when you access `/coverage/index.html`. You can install extension like [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to open up `/coverage/index.html`.
+
 You can run the test script by using the command below:
-```bash    
-$ php artisan test 
+```bash
+$ php artisan test
 
 ```
 ---
@@ -58,10 +60,12 @@ cp .env.example .env
 ```
 ```bash
 # Start the service using docker-compose
-$ docker-compose up -d
+docker-compose up -d
 
-# Access the container to run data import tasks
-$ docker exec -i -t laravel-app bash
+# Access container
+docker exec -i -t laravel-app bash
+# docker container
+$ composer install
 $ php artisan key:generate
 $ php artisan migrate
 $ php artisan import:pharmacy-data
