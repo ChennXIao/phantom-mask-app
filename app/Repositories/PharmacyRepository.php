@@ -33,21 +33,28 @@ class PharmacyRepository
         return $query->get();
     }
 
-    public function filterByMaskCount(?float $minPrice = null, ?float $maxPrice = null, string $operator = '>', int $count = 0)
+    public function filterByMaskCount(?float $minPrice = null, ?float $maxPrice = null, ?int $minCount = null, ?int $maxCount = null)
     {
-        return Pharmacy::whereHas('masks', function ($q) use ($minPrice, $maxPrice) {
-            if ($minPrice !== null && $maxPrice !== null) {
-                $q->whereBetween('price', [$minPrice, $maxPrice]);
+        $query = Pharmacy::withCount([
+            'masks as count' => function ($query) use ($minPrice, $maxPrice) {
+                $query->whereBetween('price', [$minPrice, $maxPrice]);
             }
-        }, $operator, $count)
-        ->with(['masks' => function($q) use ($minPrice, $maxPrice) {
-            if ($minPrice !== null && $maxPrice !== null) {
-                $q->whereBetween('price', [$minPrice, $maxPrice]);
-            }
-            $q->select('id', 'pharmacy_id', 'name', 'price');
-        }])
-        ->select('id', 'name')
-        ->get();
+        ]);
+
+        if (!is_null($minCount) && !is_null($maxCount)) {
+            $query->havingBetween('masks_in_range_count', [$minCount, $maxCount]);
+        } elseif (!is_null($minCount)) {
+            $query->having('count', '>=', $minCount);
+        } elseif (!is_null($maxCount)) {
+            $query->having('count', '<=', $maxCount);
+        }
+
+        return $query
+            ->with(['masks' => function ($query) use ($minPrice, $maxPrice) {
+                $query->whereBetween('price', [$minPrice, $maxPrice])
+                    ->select('id', 'pharmacy_id', 'name', 'price');
+            }])
+            ->get();
     }
 
     public function upsertMask(Pharmacy $pharmacy, array $maskData)
@@ -61,7 +68,7 @@ class PharmacyRepository
         );
     }
 
-        public function updateStock(Mask $mask, int $stockDelta): Mask
+    public function updateStock(Mask $mask, int $stockDelta): Mask
     {
         $mask->stock_quantity += $stockDelta;
         $mask->save();

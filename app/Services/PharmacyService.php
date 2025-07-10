@@ -37,13 +37,24 @@ class PharmacyService
     {
         $minPrice = $validatedData['min_price'] ?? null;
         $maxPrice = $validatedData['max_price'] ?? null;
-        $operator = $validatedData['operator'] ?? '>';
-        $count = $validatedData['count'] ?? 0;
+        $minCount = $validatedData['min_count'] ?? null;
+        $maxCount = $validatedData['max_count'] ?? null;
 
-        return $this->pharmacyRepository->filterByMaskCount($minPrice, $maxPrice, $operator, $count)
+        return $this->pharmacyRepository->filterByMaskCount($minPrice, $maxPrice, $minCount, $maxCount)
             ->filter(function ($pharmacy) {
                 return $pharmacy->masks->isNotEmpty();
-            })->values();
+            })
+            ->map(function ($pharmacy) {
+                unset($pharmacy->created_at, $pharmacy->updated_at);
+
+                $pharmacy->masks = $pharmacy->masks->map(function ($mask) {
+                    unset($mask->created_at, $mask->updated_at, $mask->pharmacy_id);
+                    return $mask;
+                });
+
+                return $pharmacy;
+            })
+            ->values();
     }
 
     public function batchUpsertMasks(Pharmacy $pharmacy, array $masksData)

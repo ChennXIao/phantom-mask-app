@@ -22,10 +22,10 @@ class FilterByMaskCountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'min_price' => 'sometimes|numeric|min:0',
-            'max_price' => 'sometimes|numeric|min:0',
-            'operator' => 'sometimes|string|in:>,<,=',
-            'count' => 'sometimes|integer|min:0',
+            'min_price' => 'required|numeric|min:0',
+            'max_price' => 'required|numeric|min:1',
+            'min_count' => 'nullable|integer|min:0|required_without_all:max_count',
+            'max_count' => 'nullable|integer|min:1|required_without_all:min_count',
         ];
     }
 }
