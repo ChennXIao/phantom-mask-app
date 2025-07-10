@@ -1,0 +1,786 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Phantom Mask API",
+        "description": "API for managing pharmacies and masks",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/orders/top-spenders": {
+            "get": {
+                "summary": "Get top spenders",
+                "operationId": "bcfafa3c13761b7c9e08ee04c573633e",
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "0000"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Success."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Timothy Schultz"
+                                                    },
+                                                    "total_spent": {
+                                                        "type": "string",
+                                                        "example": "170.56"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/orders": {
+            "post": {
+                "summary": "Create an order",
+                "operationId": "445bab4f7dc9ea6fcd54f286c0209478",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "customer_id": {
+                                        "type": "integer"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "mask_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "pharmacy_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "quantity": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "0000"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Success."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Order"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Insufficient stock",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "4221"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Insufficient stock for mask ID 6"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/pharmacies": {
+            "get": {
+                "summary": "List pharmacies filter by day and time.",
+                "operationId": "56e56d838fe317f6b5f16b11c045ea61",
+                "parameters": [
+                    {
+                        "name": "day",
+                        "in": "query",
+                        "description": "Day of the week (e.g., Mon)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "time",
+                        "in": "query",
+                        "description": "Time (e.g., 14:00:00)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "0000"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Success."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/PharmacyWithHour"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/pharmacies/{pharmacy}/masks": {
+            "get": {
+                "summary": "Get masks for a specific pharmacy",
+                "operationId": "8144d2c4e39bf353b3a1e9d879696cca",
+                "parameters": [
+                    {
+                        "name": "pharmacy",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by price or name",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "price",
+                                "name"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Sort direction: asc for ascending, desc for descending.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "0000"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Success."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Mask"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/pharmacies/filter-by-mask-count": {
+            "get": {
+                "summary": "Filter pharmacies by mask count",
+                "operationId": "c96d22f1f7b6d4e87cf21174441782cf",
+                "parameters": [
+                    {
+                        "name": "min_price",
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "max_price",
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "min_count",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "max_count",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "0000"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Success."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/PharmacyWithMask"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/pharmacies/{pharmacy}/masks/batch": {
+            "post": {
+                "summary": "Batch upsert masks for a pharmacy",
+                "operationId": "fb69bef4ea41e9891eef6373f960734d",
+                "parameters": [
+                    {
+                        "name": "pharmacy",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "masks": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "price": {
+                                                    "type": "number"
+                                                },
+                                                "stock_quantity": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "0000"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Success."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Mask"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/pharmacies/{pharmacy}/masks/{mask}": {
+            "patch": {
+                "summary": "Update mask stock",
+                "operationId": "47b723c38519943a572347879e20065b",
+                "parameters": [
+                    {
+                        "name": "pharmacy",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "mask",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "stock_delta": {
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "0000"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Success."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Mask"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mask not found in pharmacy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "4041"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Mask id 20 not found in the specified pharmacy."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Stock cannot be negative",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "4221"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Insufficient stock for the requested mask."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/search": {
+            "get": {
+                "summary": "Search for pharmacies or masks",
+                "operationId": "4e926a43a34c5b7c6c1f7ace22ba8865",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "metadata": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "0000"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Success."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "pharmacies": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 3
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "First Care Rx"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id",
+                                                            "name"
+                                                        ]
+                                                    }
+                                                },
+                                                "masks": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Mask": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Mask"
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": 100
+                    },
+                    "stock_quantity": {
+                        "type": "integer",
+                        "example": 30
+                    }
+                },
+                "type": "object"
+            },
+            "Order": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "customer_id": {
+                        "type": "integer"
+                    },
+                    "total_amount": {
+                        "type": "number"
+                    }
+                },
+                "type": "object"
+            },
+            "OrderDetail": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "order_id": {
+                        "type": "integer"
+                    },
+                    "mask_id": {
+                        "type": "integer"
+                    },
+                    "pharmacy_id": {
+                        "type": "integer"
+                    },
+                    "quantity": {
+                        "type": "integer"
+                    },
+                    "unit_price": {
+                        "type": "number"
+                    },
+                    "total_price": {
+                        "type": "number"
+                    }
+                },
+                "type": "object"
+            },
+            "PharmacyWithHour": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Pharmacy"
+                    },
+                    "hours": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PharmacyHour"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "PharmacyWithMask": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Pharmacy"
+                    },
+                    "masks": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Mask"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "PharmacyHour": {
+                "properties": {
+                    "weekday": {
+                        "type": "string",
+                        "example": "Mon"
+                    },
+                    "open_time": {
+                        "type": "string",
+                        "example": "08:00:00"
+                    },
+                    "close_time": {
+                        "type": "string",
+                        "example": "20:00:00"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
