@@ -68,7 +68,7 @@ class PharmacyControllerTest extends TestCase
         $pharmacy = Pharmacy::factory()->create();
         Mask::factory()->count(3)->create(['pharmacy_id' => $pharmacy->id, 'price' => 10]);
 
-        $response = $this->getJson('/api/pharmacies/filter-by-mask-count?min_price=5&max_price=15&operator=>&count=2');
+        $response = $this->getJson('/api/pharmacies/filter-by-mask-count?min_price=5&max_price=15&min_count=1&max_count=3');
 
 
         $response->assertStatus(200)
@@ -115,7 +115,7 @@ class PharmacyControllerTest extends TestCase
         $response = $this->patchJson("/api/pharmacies/{$pharmacy->id}/masks/{$mask->id}", ['stock_delta' => -11]);
 
         $response->assertStatus(404)
-                 ->assertJson(['metadata' => ['status' => '4041', 'message' => 'Mask id ' . $mask->id . ' not found in the specified pharmacy']]);
+                 ->assertJson(['metadata' => ['status' => '4041', 'message' => 'Mask id ' . $mask->id . ' not found in the specified pharmacy.']]);
     }
 
     public function test_returns_error_if_stock_becomes_negative()

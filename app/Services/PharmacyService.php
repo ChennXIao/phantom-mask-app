@@ -96,7 +96,7 @@ class PharmacyService
     public function updateMaskStock(Pharmacy $pharmacy, Mask $mask, int $stockDelta)
     {
         if (!$this->pharmacyRepository->isMaskBelongsToPharmacy($mask, $pharmacy->id)) {
-            throw new MaskNotFoundInPharmacyException("Mask id {$mask->id} not found in the specified pharmacy");
+            throw new MaskNotFoundInPharmacyException("Mask id {$mask->id} not found in the specified pharmacy.");
         }
 
         $newStock = $this->pharmacyRepository->getStockQuantity($mask) + $stockDelta;
