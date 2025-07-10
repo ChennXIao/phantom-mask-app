@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('close_time');
             $table->timestamps();
 
-            $table->index(['pharmacy_id', 'weekday', 'open_time']);
+            $table->index(['pharmacy_id', 'weekday', 'open_time','close_time']);
         });
     }
 

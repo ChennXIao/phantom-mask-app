@@ -1,0 +1,77 @@
+Table pharmacies {
+    id integer [primary key]
+    name varchar [unique]
+    cash_balance decimal(10, 2)
+    created_at timestamp
+    updated_at timestamp
+  }
+
+  Table customers {
+    id integer [primary key]
+    name varchar
+    cash_balance decimal(10, 2)
+    created_at timestamp
+    updated_at timestamp
+  }
+
+  Table pharmacy_hours {
+    id integer [primary key]
+    pharmacy_id integer
+    weekday string
+    open_time time
+    close_time time
+    created_at timestamp
+    updated_at timestamp
+    indexes {
+      (pharmacy_id, weekday, open_time, close_time)
+    }
+  }
+
+  Table masks {
+    id integer [primary key]
+    pharmacy_id integer
+    name varchar
+    price decimal(10, 2)
+    stock_quantity integer
+    is_active boolean
+    created_at timestamp
+    updated_at timestamp
+    indexes {
+      (pharmacy_id, name) [unique]
+      (pharmacy_id, price)
+    }
+  }
+
+  Table orders {
+    id integer [primary key]
+    customer_id integer
+    total_amount decimal(12, 2)
+    purchased_at datetime
+    created_at timestamp
+    updated_at timestamp
+    indexes {
+      (customer_id, purchased_at)
+    }
+  }
+
+  Table order_details {
+    id integer [primary key]
+    order_id integer
+    mask_id integer
+    pharmacy_id integer
+    quantity integer
+    unit_price decimal(10, 2)
+    total_price decimal(12, 2)
+    created_at timestamp
+    updated_at timestamp
+    indexes {
+      (pharmacy_id, mask_id)
+    }
+  }
+
+  Ref: pharmacy_hours.pharmacy_id > pharmacies.id
+  Ref: masks.pharmacy_id > pharmacies.id
+  Ref: orders.customer_id > customers.id
+  Ref: order_details.order_id > orders.id
+  Ref: order_details.mask_id > masks.id
+  Ref: order_details.pharmacy_id > pharmacies.id
