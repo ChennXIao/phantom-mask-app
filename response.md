@@ -44,7 +44,7 @@ You can open it up test report from [here](http://localhost:5500/coverage/index.
 $ XDEBUG_MODE=coverage php artisan test --coverage-html=coverage    
 
 ```
-- hint: after running this command, `/coverage` your IDE, the report can be seen when you access `/coverage/index.html`. You can install extension like [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to open up `/coverage/index.html`.
+- hint: after running this command, `/coverage` will be output to your IDE, the report can be seen when you access `/coverage/index.html`. You can install extension like [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to open up `/coverage/index.html`.
 
 You can run the test script by using the command below:
 ```bash
