@@ -37,7 +37,7 @@ php artisan import:customers-data
 ## Test Coverage Report
 I have written tests for the implemented API endpoints. You can find them in the `tests/Feature` directory.
 
-You can open it up test report from [here](http://localhost:5500/coverage/index.html) after running in generate coverage report command in docker container:
+You can open it up test report after running in generate coverage report command in docker container:
 
 ```bash
 # Generate coverage report
